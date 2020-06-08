@@ -7,41 +7,42 @@ using System.Threading.Tasks;
 //install RLNET and RogueSharp in Nuget Extensions
 using RLNET;
 
+using First_Game.Systems;
 //include new core folder
 using First_Game.Core;
 
 namespace First_Game
 {
-    class Game
+    public class Game
     {
         // set the screen height and width
         //make sure the subconsole sizes you create fit appropriatley with the main screen
-        private static readonly int _screenWidth = 150;
-        private static readonly int _screenHeight = 90;
+        private static readonly int _screenWidth = 100;
+        private static readonly int _screenHeight = 70;
 
         private static RLRootConsole _rootConsole;
 
         //The console for the map that we are using that will take most of the mainscreen
-        private static readonly int _mapWidth = 130;
+        private static readonly int _mapWidth = 80;
         private static readonly int _mapHeight = 48;
         private static RLConsole _mapConsole;
 
         //This console is for displaying attack rolls and other information
-        private static readonly int _messageWidth = 130;
+        private static readonly int _messageWidth = 80;
         private static readonly int _messageHeight = 11;
         private static RLConsole _messageConsole;
 
         //this console is too display the player and monster stats
         private static readonly int _statWidth = 20;
-        private static readonly int _statHeight = 90;
+        private static readonly int _statHeight = 70;
         private static RLConsole _statConsole;
 
         //This console is too display your current inventory
-        private static readonly int _inventoryWidth = 130;
+        private static readonly int _inventoryWidth = 80;
         private static readonly int _inventoryHeight = 11;
         private static RLConsole _inventoryConsole;
 
-
+        public static DungeonMap DungeonMap { get; private set; }
 
 
         static void Main(string[] args)
@@ -59,6 +60,9 @@ namespace First_Game
             _messageConsole = new RLConsole(_messageWidth, _messageHeight);
             _statConsole = new RLConsole(_statWidth, _statHeight);
             _inventoryConsole = new RLConsole(_inventoryWidth, _inventoryHeight);
+
+            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight);
+            DungeonMap = mapGenerator.CreateMap();
 
             //Method for RNL Update
             _rootConsole.Update += OnRootConsoleUpdate;
@@ -89,6 +93,8 @@ namespace First_Game
 
             RLConsole.Blit(_inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight, _rootConsole, 0, 0);
 
+            DungeonMap.Draw(_mapConsole);
+
             _rootConsole.Draw();
 
 
@@ -104,7 +110,7 @@ namespace First_Game
             //set the background color and text for each console
 
             _mapConsole.SetBackColor(0, 0, _mapWidth, _mapHeight, RLColor.Black);
-            _mapConsole.Print(1, 1, "Map", Colors.TextHeading);
+            _mapConsole.Print(1, 1, "", Colors.TextHeading);
 
             _messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, RLColor.Gray);
             _messageConsole.Print(1, 1, "Messages", Colors.TextHeading);

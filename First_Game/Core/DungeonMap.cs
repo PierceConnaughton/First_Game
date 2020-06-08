@@ -29,12 +29,45 @@ namespace First_Game.Core
             }
         }
 
-        private void SetConsoleSymbolForCell(RLConsole mapConsole, Cell cell)
+        private void SetConsoleSymbolForCell(RLConsole console, Cell cell)
         {
+            //When a cell hasnt been explored yet we will return
             if (!cell.IsExplored)
             {
+                return;
+            }
+
+            //when a cell is in the field of view it should be drawn in lighter colors
+            if (IsInFov(cell.X, cell.Y))
+            {
+
+                //choose the symbol to draw based on if the cell is walkable or not
+                // '.' for floor and # for walls
+                if (cell.IsWalkable)
+                {
+                    console.Set(cell.X, cell.Y, Colors.FloorFov, Colors.FloorBackgroundFov, '.');
+                }
+                else
+                {
+                    console.Set(cell.X, cell.Y, Colors.WallFov, Colors.WallBackgroundFov, '#');
+
+                }
 
             }
+            //when cell is outside view use darker colors
+            else
+            {
+                if (cell.IsWalkable)
+                {
+                    console.Set(cell.X, cell.Y, Colors.Floor, Colors.FloorBackground, '.');
+                }
+                else
+                {
+                    console.Set(cell.X, cell.Y, Colors.Wall, Colors.WallBackground, '#');  
+                }
+            }
+            
+
         }
     }
 }
