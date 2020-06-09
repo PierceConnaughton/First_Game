@@ -42,6 +42,10 @@ namespace First_Game
         private static readonly int _inventoryHeight = 11;
         private static RLConsole _inventoryConsole;
 
+        //add player to the game
+        public static Player player { get; private set; }
+
+        //add dungeon map too the game
         public static DungeonMap DungeonMap { get; private set; }
 
 
@@ -61,8 +65,15 @@ namespace First_Game
             _statConsole = new RLConsole(_statWidth, _statHeight);
             _inventoryConsole = new RLConsole(_inventoryWidth, _inventoryHeight);
 
+            //construct a new player
+            player = new Player();
+
+            //construct a new dungeon map
             MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight);
             DungeonMap = mapGenerator.CreateMap();
+
+            //add the players field of view
+            DungeonMap.UpdatePlayerFieldOfView();
 
             //Method for RNL Update
             _rootConsole.Update += OnRootConsoleUpdate;
@@ -94,6 +105,9 @@ namespace First_Game
             RLConsole.Blit(_inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight, _rootConsole, 0, 0);
 
             DungeonMap.Draw(_mapConsole);
+
+            //draw the player into the map
+            player.Draw(_mapConsole, DungeonMap);
 
             _rootConsole.Draw();
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
+using First_Game.Core;
 using RLNET;
 using RogueSharp;
 //make sure too include rogue sharp this time
@@ -66,8 +66,25 @@ namespace First_Game.Core
                     console.Set(cell.X, cell.Y, Colors.Wall, Colors.WallBackground, '#');  
                 }
             }
-            
+        }
 
+        //anytime the player moves we call this method
+        public void UpdatePlayerFieldOfView()
+        {
+            //get the current player
+            Player player = Game.player;
+
+            //get the field of view for this player based on there current awarness
+            ComputeFov(player.X, player.Y, player.Awareness, true);
+
+            // Mark all cells of field of view as having been explored
+            foreach (Cell cell in GetAllCells())
+            {
+                if (IsInFov( cell.X, cell.Y))
+                {
+                    SetCellProperties(cell.X, cell.Y, cell.IsTransparent, cell.IsWalkable, true);
+                }
+            }
         }
     }
 }
