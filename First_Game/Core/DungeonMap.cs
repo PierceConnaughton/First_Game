@@ -14,6 +14,15 @@ namespace First_Game.Core
     //DungeonMap is our sub class we created of the base class that was created by rouge sharp
     public class DungeonMap : Map
     {
+        //create a list of rooms
+        public List<Rectangle> Rooms;
+
+        public DungeonMap()
+        {
+            //everytime we create a dungeon map we have a list of rooms created
+            Rooms = new List<Rectangle>();
+        }
+
         //The Draw method will be called each time the map is updated
         //It will render all of the symbols or colors for each cell to the map sub console we created earlier
 

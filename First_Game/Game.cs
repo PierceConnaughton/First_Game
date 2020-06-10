@@ -10,6 +10,7 @@ using RLNET;
 using First_Game.Systems;
 //include new core folder
 using First_Game.Core;
+using RogueSharp.Random;
 
 namespace First_Game
 {
@@ -46,6 +47,8 @@ namespace First_Game
 
         public static CommandSystem commandSystem { get; private set; }
 
+        public static IRandom random { get; private set; }
+
         //add player to the game
         public static Player player { get; private set; }
 
@@ -58,8 +61,16 @@ namespace First_Game
             //name of bitmap font file
             string fontFileName = "Images/terminal8x8.png";
 
-            // The title will appear at the top of the console window
-            string consoleTitle = "RougeSharp V3 Tutorial -  Level 1";
+            //UTCNOW is the current time on this computer
+            //Ticks are the number of nanoseconds since the start of year 0001 too now
+            int seed = (int)DateTime.UtcNow.Ticks;
+
+            //DotNetRandom is a random number generator that is part of .Net
+            random = new DotNetRandom(seed);
+
+            // The title will appear at the top of the console window including the seed used too generate the level
+            string consoleTitle = $"RougeSharp V3 Tutorial -  Level 1 - Seed {seed}";
+
 
             //Tell RLNet to use the bitmap font that we specified and that each tile is 8 x 8 pixels
             _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight, 8, 8, 1f, consoleTitle);
@@ -74,8 +85,8 @@ namespace First_Game
             //construct a new player
             player = new Player();
 
-            //construct a new dungeon map
-            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight);
+            //construct a new dungeon map with the size of the map the number of rooms you want and the max and min sizes of those rooms
+            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7 );
             DungeonMap = mapGenerator.CreateMap();
 
             //add the players field of view
