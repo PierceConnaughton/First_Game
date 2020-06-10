@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using RLNET;
 using RogueSharp;
 using First_Game.Core;
+using RogueSharp.DiceNotation;
+using First_Game.Monsters;
 
 namespace First_Game.Systems
 {
@@ -104,6 +106,8 @@ namespace First_Game.Systems
             //once rooms and tunnels are generated we add the player too the map
             PlacePlayer();
 
+            PlaceMonsters();
+
             return _map;
 
 
@@ -161,6 +165,34 @@ namespace First_Game.Systems
             player.Y = _map.Rooms[0].Center.Y;
 
             _map.AddPlayer(player);
+        }
+
+        //this method goes through each room and rolls a 10-sided die.
+        //if the result of thr roll is 1 - 6 we'll roll 4 sided die and 
+        //add that many monsters too that particular room in any open cells
+        private void PlaceMonsters()
+        {
+            foreach (var room in _map.Rooms)
+            {
+
+
+                if (Dice.Roll("1D10") < 7)
+                {
+                    var numberOfMonsters = Dice.Roll("1D4");
+                    for (int i = 0; i < numberOfMonsters; i++)
+                    {
+                        Point randomRoomLocation = _map.GetRandomWalkableLocationInRoom(room);
+
+                        if (randomRoomLocation != null)
+                        {
+                            var monster = Kobold.Create(1);
+                            monster.X = randomRoomLocation.X;
+                            monster.Y = randomRoomLocation.Y;
+                            _map.AddMonster(monster);
+                        }
+                    }
+                }
+            }
         }
 
         //creates a tunnel out of the map parallel too the x-axis too the next room

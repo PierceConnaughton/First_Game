@@ -33,5 +33,8 @@ namespace First_Game.Core
         public static RLColor Text = Swatch.DbLight;
 
         public static RLColor Gold = Swatch.DbSun;
+
+        //color of first monster of the game
+        public static RLColor KoboldColor = RLColor.Red;
     }
 }

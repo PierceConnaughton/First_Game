@@ -17,10 +17,15 @@ namespace First_Game.Core
         //create a list of rooms
         public List<Rectangle> Rooms;
 
+        private readonly List<Monster> _monsters;
+
         public DungeonMap()
         {
-            //everytime we create a dungeon map we have a list of rooms created
+            //everytime we create a dungeon map we have a list of rooms created and monsters created
             Rooms = new List<Rectangle>();
+
+
+            _monsters = new List<Monster>();
         }
 
         //The Draw method will be called each time the map is updated
@@ -35,6 +40,10 @@ namespace First_Game.Core
             foreach (Cell cell in GetAllCells())
             {
                 SetConsoleSymbolForCell(mapConsole, cell);
+            }
+            foreach (Monster monster in _monsters)
+            {
+                monster.Draw( mapConsole,this);
             }
         }
 
@@ -140,6 +149,52 @@ namespace First_Game.Core
             Game.player = player;
             SetIsWalkable(player.X, player.Y, false);
             UpdatePlayerFieldOfView();
+        }
+
+        //whenever we create a map we add monsters too it after
+        public void AddMonster( Monster monster)
+        {
+            //after adding a monster too the map we check that the cell is not walkable that they are now on
+            _monsters.Add(monster);
+
+            SetIsWalkable(monster.X, monster.Y, false);
+        }
+
+        //we use this method too find a random cell in the map that is walkable for the monster too spawn in
+        public Point GetRandomWalkableLocationInRoom(Rectangle room)
+        {
+            if (DoesRoomHaveWalkableSpace(room))
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    int x = Game.random.Next(1, room.Width - 2) + room.X;
+                    int y = Game.random.Next(1, room.Width - 2) + room.Y;
+
+                    if (IsWalkable(x,y))
+                    {
+                        return new Point(x, y);
+                    }
+                }
+            }
+
+            //if a cell couldnt be found return back its default point value which would be null
+            return default(Point);
+        }
+
+        //go through each cell in the room and return true if it finds a cell that is walkable otherwise return false
+        public bool DoesRoomHaveWalkableSpace(Rectangle room)
+        {
+            for (int x = 1; x < room.Width - 2; x++)
+            {
+                for (int y = 1; y < room.Height - 2; y++)
+                {
+                    if (IsWalkable (x + room.X, y + room.Y))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
 
