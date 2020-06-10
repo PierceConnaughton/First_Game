@@ -59,6 +59,8 @@ namespace First_Game
 
         public static MessageLog messageLog { get; private set; }
 
+        public static SchedulingSystem SchedulingSystem { get; private set; }
+
 
         static void Main(string[] args)
         {
@@ -74,6 +76,8 @@ namespace First_Game
 
             // The title will appear at the top of the console window including the seed used too generate the level
             string consoleTitle = $"RougeSharp V3 Tutorial -  Level 1 - Seed {seed}";
+
+            SchedulingSystem = new SchedulingSystem();
 
             messageLog = new MessageLog();
 
@@ -170,37 +174,47 @@ namespace First_Game
             bool didPlayerAct = false;
             RLKeyPress keyPress = _rootConsole.Keyboard.GetKeyPress();
 
-            //if you have pressed a key
-            if (keyPress != null)
+            if (commandSystem.IsPlayerTurn)
             {
-                //checks what key you have pressed if it was up down left or right and depending on the key
-                //uses the command system class too find you new position on the map
-                if (keyPress.Key == RLKey.Up)
+
+                //if you have pressed a key
+                if (keyPress != null)
                 {
-                    didPlayerAct = commandSystem.MovePlayer(Direction.Up);
+                    //checks what key you have pressed if it was up down left or right and depending on the key
+                    //uses the command system class too find you new position on the map
+                    if (keyPress.Key == RLKey.Up)
+                    {
+                        didPlayerAct = commandSystem.MovePlayer(Direction.Up);
+                    }
+                    else if (keyPress.Key == RLKey.Down)
+                    {
+                        didPlayerAct = commandSystem.MovePlayer(Direction.Down);
+                    }
+                    else if (keyPress.Key == RLKey.Left)
+                    {
+                        didPlayerAct = commandSystem.MovePlayer(Direction.Left);
+                    }
+                    else if (keyPress.Key == RLKey.Right)
+                    {
+                        didPlayerAct = commandSystem.MovePlayer(Direction.Right);
+                    }
+                    else if (keyPress.Key == RLKey.Escape)
+                    {
+                        _rootConsole.Close();
+                    }
                 }
-                else if (keyPress.Key == RLKey.Down)
-                {
-                    didPlayerAct = commandSystem.MovePlayer(Direction.Down);
-                }
-                else if (keyPress.Key == RLKey.Left)
-                {
-                    didPlayerAct = commandSystem.MovePlayer(Direction.Left);
-                }
-                else if (keyPress.Key == RLKey.Right)
-                {
-                    didPlayerAct = commandSystem.MovePlayer(Direction.Right);
-                }
-                else if (keyPress.Key == RLKey.Escape)
-                {
-                    _rootConsole.Close();
-                } 
             }
             if (didPlayerAct)
             {
                 //counts the steps player took
                 //messageLog.Add($"Step # {++_steps}");
 
+                _renderRequired = true;
+                commandSystem.EndPlayerTurn();
+            }
+            else
+            {
+                commandSystem.ActivateMonsters();
                 _renderRequired = true;
             }
 

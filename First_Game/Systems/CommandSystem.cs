@@ -4,13 +4,61 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using First_Game.Core;
+using First_Game.Interfaces;
+using RogueSharp;
 using RogueSharp.DiceNotation;
 
 namespace First_Game.Systems
 {
     public class CommandSystem
     {
-        //this method allows rge okater too move or not
+        public bool IsPlayerTurn { get; set; }
+
+        public void EndPlayerTurn()
+        {
+            IsPlayerTurn = false;
+        }
+
+        //activate monsters puts monsters into a scheduled list
+        public void ActivateMonsters()
+        {
+            IScheduleable scheduleable = Game.SchedulingSystem.Get();
+            //if the object being scheduled is a player
+            //set player the player turn too true and add the player too the scheduling system
+            if (scheduleable is Player)
+            {
+                IsPlayerTurn = true;
+                Game.SchedulingSystem.Add(Game.player);
+            }
+            else
+            {
+                //if the object being scheduled is a monster
+                Monster monster = scheduleable as Monster;
+
+                if (monster != null)
+                {
+                    monster.PerformAction(this);
+                    Game.SchedulingSystem.Add(monster);
+                   
+                }
+                ActivateMonsters();
+
+
+            }
+        }
+
+        public void MoveMonster(Monster monster, Cell cell)
+        {
+            if (!Game.DungeonMap.SetActorPosition(monster,cell.X,cell.Y))
+            {
+                if (Game.player.X == cell.X && Game.player.Y == cell.Y)
+                {
+                    Attack(monster, Game.player);
+                }
+            }
+        }
+
+        //this method allows the player too move or not
         //it returns true if the player was able to move
         //and returns false when the player cant move, eg:moving into a wall
         public bool MovePlayer(Direction direction)

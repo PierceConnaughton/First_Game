@@ -9,7 +9,7 @@ using RogueSharp;
 
 namespace First_Game.Core
 {
-    public class Actor : IActor, IDrawable
+    public class Actor : IActor, IDrawable, IScheduleable
     {
         //IActor 
         private int _attack;
@@ -149,6 +149,15 @@ namespace First_Game.Core
         public char Symbol { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+
+        // IScheduleable
+        public int Time
+        {
+            get
+            {
+                return Speed;
+            }
+        }
 
         public void Draw(RLConsole console, IMap map)
         {

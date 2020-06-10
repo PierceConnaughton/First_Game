@@ -1,4 +1,6 @@
-﻿using RLNET;
+﻿using First_Game.Behaviors;
+using First_Game.Systems;
+using RLNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,9 @@ namespace First_Game.Core
     //monster is a subclass of an actor
     public class Monster : Actor
     {
+
+        public int? TurnsAlerted { get; set; }
+
         public void DrawStats(RLConsole statConsole, int position)
         {
             //start position at Y = 13 which is located below the player stats.
@@ -32,6 +37,12 @@ namespace First_Game.Core
             //prints the monsters name over the top of there health bar
             statConsole.Print(2, yPosition, $": {Name}", Swatch.DbLight);
 
+        }
+
+        public virtual void PerformAction(CommandSystem commandSystem)
+        {
+            var behavior = new StandardMoveAndAttack();
+            behavior.Act(this, commandSystem);
         }
 
         

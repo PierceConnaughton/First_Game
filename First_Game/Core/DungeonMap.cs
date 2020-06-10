@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using First_Game.Core;
 using RLNET;
 using RogueSharp;
-using First_Game;
+using First_Game.Systems;
 //make sure too include rogue sharp this time
 
 namespace First_Game.Core
@@ -164,6 +164,7 @@ namespace First_Game.Core
             Game.player = player;
             SetIsWalkable(player.X, player.Y, false);
             UpdatePlayerFieldOfView();
+            Game.SchedulingSystem.Add(player);
         }
 
         //whenever we create a map we add monsters too it after
@@ -173,6 +174,9 @@ namespace First_Game.Core
             _monsters.Add(monster);
 
             SetIsWalkable(monster.X, monster.Y, false);
+
+            Game.SchedulingSystem.Add(monster);
+
         }
 
         //removes monster from map and makes space available
@@ -183,6 +187,9 @@ namespace First_Game.Core
 
             //after removing the monster from the map, make sure the cell is available again
             SetIsWalkable(monster.X, monster.Y, true);
+
+            Game.SchedulingSystem.Remove(monster);
+
         }
 
         //gets the monster at a particular locaton using coordinates
