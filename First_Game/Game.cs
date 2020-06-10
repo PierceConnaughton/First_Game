@@ -45,6 +45,8 @@ namespace First_Game
 
         private static bool _renderRequired = true;
 
+        //private static int _steps = 0;
+
         public static CommandSystem commandSystem { get; private set; }
 
         public static IRandom random { get; private set; }
@@ -54,6 +56,8 @@ namespace First_Game
 
         //add dungeon map too the game
         public static DungeonMap DungeonMap { get; private set; }
+
+        public static MessageLog messageLog { get; private set; }
 
 
         static void Main(string[] args)
@@ -70,6 +74,12 @@ namespace First_Game
 
             // The title will appear at the top of the console window including the seed used too generate the level
             string consoleTitle = $"RougeSharp V3 Tutorial -  Level 1 - Seed {seed}";
+
+            messageLog = new MessageLog();
+
+            //adds these 2 lines of messages too the message log
+            messageLog.Add("The rogue arrives at level 1");
+            messageLog.Add($"Level created with seed '{seed}'");
 
 
             //Tell RLNet to use the bitmap font that we specified and that each tile is 8 x 8 pixels
@@ -123,6 +133,8 @@ namespace First_Game
 
                 //draw the player into the map
                 player.Draw(_mapConsole, DungeonMap);
+
+                messageLog.Draw(_messageConsole);
 
                 RLConsole.Blit(_mapConsole, 0, 0, _mapWidth, _mapHeight, _rootConsole, 0, _inventoryHeight);
 
@@ -181,13 +193,14 @@ namespace First_Game
             }
             if (didPlayerAct)
             {
+                //counts the steps player took
+                //messageLog.Add($"Step # {++_steps}");
+
                 _renderRequired = true;
             }
 
 
-            //set the background color and text for each console except the map
-            _messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, RLColor.Gray);
-            _messageConsole.Print(1, 1, "Messages", Colors.TextHeading);
+            //set the background color and text for each console except the map and message consoles
 
             _statConsole.SetBackColor(0, 0, _statWidth, _statHeight, RLColor.Red);
             _statConsole.Print(1, 1, "Stats", Colors.TextHeading);
