@@ -27,6 +27,11 @@ namespace First_Game.Core
         public static RLColor Player = Swatch.DbLight;
 
         //color of text
-        public static RLColor TextHeading = Swatch.DbLight;
+        public static RLColor TextHeading = RLColor.White;
+
+        
+        public static RLColor Text = Swatch.DbLight;
+
+        public static RLColor Gold = Swatch.DbSun;
     }
 }

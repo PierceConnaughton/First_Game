@@ -134,6 +134,8 @@ namespace First_Game
                 //draw the player into the map
                 player.Draw(_mapConsole, DungeonMap);
 
+                player.DrawStats(_statConsole);
+
                 messageLog.Draw(_messageConsole);
 
                 RLConsole.Blit(_mapConsole, 0, 0, _mapWidth, _mapHeight, _rootConsole, 0, _inventoryHeight);
@@ -201,10 +203,11 @@ namespace First_Game
 
 
             //set the background color and text for each console except the map and message consoles
+            //_messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, RLColor.Gray);
 
-            _statConsole.SetBackColor(0, 0, _statWidth, _statHeight, RLColor.Red);
-            _statConsole.Print(1, 1, "Stats", Colors.TextHeading);
-
+            //_statConsole.SetBackColor(0, 0, _statWidth, _statHeight, RLColor.Red);
+            //_statConsole.Print(1, 1, "Stats", Colors.TextHeading);
+            
             _inventoryConsole.SetBackColor(0, 0, _inventoryWidth, _inventoryHeight, RLColor.Cyan);
             _inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
 
