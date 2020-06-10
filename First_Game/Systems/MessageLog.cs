@@ -38,7 +38,9 @@ namespace First_Game.Systems
         //Draw each line of the MessageLog queue to the MessageLog Console
         public void Draw(RLConsole console)
         {
-            console.Clear();
+            //ineffecient too clear code everytime
+            //console.Clear();
+
             string[] lines = _lines.ToArray();
 
             for (int i = 0; i < lines.Length; i++)

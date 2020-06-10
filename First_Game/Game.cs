@@ -128,8 +128,11 @@ namespace First_Game
             //if a render is required draw everything otherwise don't
             if (_renderRequired)
             {
+                _mapConsole.Clear();
+                _statConsole.Clear();
+                _messageConsole.Clear();
 
-                DungeonMap.Draw(_mapConsole);
+                DungeonMap.Draw(_mapConsole,_statConsole);
 
                 //draw the player into the map
                 player.Draw(_mapConsole, DungeonMap);
