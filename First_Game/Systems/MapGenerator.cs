@@ -40,7 +40,7 @@ namespace First_Game.Systems
             //Set the first and last rows in the map to not be transparent or walkable
             foreach (Cell cell in _map.GetCellsInRows(0, _height - 1))
             {
-                _map.SetCellProperties(cell.X, cell.Y, true, true, true);
+                _map.SetCellProperties(cell.X, cell.Y, false, false, true);
             }
 
             //set the first and last coloumns in the map to not be transparent or walkable

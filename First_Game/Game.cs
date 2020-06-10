@@ -17,18 +17,18 @@ namespace First_Game
     {
         // set the screen height and width
         //make sure the subconsole sizes you create fit appropriatley with the main screen
-        private static readonly int _screenWidth = 100;
+        private static readonly int _screenWidth = 120;
         private static readonly int _screenHeight = 70;
 
         private static RLRootConsole _rootConsole;
 
         //The console for the map that we are using that will take most of the mainscreen
-        private static readonly int _mapWidth = 80;
+        private static readonly int _mapWidth = 100;
         private static readonly int _mapHeight = 48;
         private static RLConsole _mapConsole;
 
         //This console is for displaying attack rolls and other information
-        private static readonly int _messageWidth = 80;
+        private static readonly int _messageWidth = 100;
         private static readonly int _messageHeight = 11;
         private static RLConsole _messageConsole;
 
@@ -38,9 +38,13 @@ namespace First_Game
         private static RLConsole _statConsole;
 
         //This console is too display your current inventory
-        private static readonly int _inventoryWidth = 80;
+        private static readonly int _inventoryWidth = 100;
         private static readonly int _inventoryHeight = 11;
         private static RLConsole _inventoryConsole;
+
+        private static bool _renderRequired = true;
+
+        public static CommandSystem commandSystem { get; private set; }
 
         //add player to the game
         public static Player player { get; private set; }
@@ -65,6 +69,8 @@ namespace First_Game
             _statConsole = new RLConsole(_statWidth, _statHeight);
             _inventoryConsole = new RLConsole(_inventoryWidth, _inventoryHeight);
 
+            commandSystem = new CommandSystem();
+
             //construct a new player
             player = new Player();
 
@@ -74,6 +80,8 @@ namespace First_Game
 
             //add the players field of view
             DungeonMap.UpdatePlayerFieldOfView();
+
+
 
             //Method for RNL Update
             _rootConsole.Update += OnRootConsoleUpdate;
@@ -96,20 +104,31 @@ namespace First_Game
             6. a destination console to blit to
             7. the blit destination of the top left corner of where we will blit to in the destination console
             */
-            RLConsole.Blit(_mapConsole, 0, 0, _mapWidth, _mapHeight, _rootConsole, 0, _inventoryHeight);
 
-            RLConsole.Blit(_statConsole, 0, 0, _statWidth, _statHeight, _rootConsole, _mapWidth, 0);
+            //if a render is required draw everything otherwise don't
+            if (_renderRequired)
+            {
 
-            RLConsole.Blit(_messageConsole, 0, 0, _messageWidth, _messageHeight, _rootConsole, 0, _screenHeight - _messageHeight);
+                DungeonMap.Draw(_mapConsole);
 
-            RLConsole.Blit(_inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight, _rootConsole, 0, 0);
+                //draw the player into the map
+                player.Draw(_mapConsole, DungeonMap);
 
-            DungeonMap.Draw(_mapConsole);
+                RLConsole.Blit(_mapConsole, 0, 0, _mapWidth, _mapHeight, _rootConsole, 0, _inventoryHeight);
 
-            //draw the player into the map
-            player.Draw(_mapConsole, DungeonMap);
+                RLConsole.Blit(_statConsole, 0, 0, _statWidth, _statHeight, _rootConsole, _mapWidth, 0);
 
-            _rootConsole.Draw();
+                RLConsole.Blit(_messageConsole, 0, 0, _messageWidth, _messageHeight, _rootConsole, 0, _screenHeight - _messageHeight);
+
+                RLConsole.Blit(_inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight, _rootConsole, 0, 0);
+
+
+                _rootConsole.Draw();
+
+                _renderRequired = false;
+            }
+
+           
 
 
         }
@@ -121,11 +140,42 @@ namespace First_Game
             //Write this code at the start too check if your console update method has actually worked first
             //_rootConsole.Print(10, 10, "It worked", RLColor.Green);
 
-            //set the background color and text for each console
+            bool didPlayerAct = false;
+            RLKeyPress keyPress = _rootConsole.Keyboard.GetKeyPress();
 
-            _mapConsole.SetBackColor(0, 0, _mapWidth, _mapHeight, RLColor.Black);
-            _mapConsole.Print(1, 1, "", Colors.TextHeading);
+            //if you have pressed a key
+            if (keyPress != null)
+            {
+                //checks what key you have pressed if it was up down left or right and depending on the key
+                //uses the command system class too find you new position on the map
+                if (keyPress.Key == RLKey.Up)
+                {
+                    didPlayerAct = commandSystem.MovePlayer(Direction.Up);
+                }
+                else if (keyPress.Key == RLKey.Down)
+                {
+                    didPlayerAct = commandSystem.MovePlayer(Direction.Down);
+                }
+                else if (keyPress.Key == RLKey.Left)
+                {
+                    didPlayerAct = commandSystem.MovePlayer(Direction.Left);
+                }
+                else if (keyPress.Key == RLKey.Right)
+                {
+                    didPlayerAct = commandSystem.MovePlayer(Direction.Right);
+                }
+                else if (keyPress.Key == RLKey.Escape)
+                {
+                    _rootConsole.Close();
+                } 
+            }
+            if (didPlayerAct)
+            {
+                _renderRequired = true;
+            }
 
+
+            //set the background color and text for each console except the map
             _messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, RLColor.Gray);
             _messageConsole.Print(1, 1, "Messages", Colors.TextHeading);
 

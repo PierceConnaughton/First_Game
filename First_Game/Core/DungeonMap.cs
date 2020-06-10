@@ -63,7 +63,7 @@ namespace First_Game.Core
                 }
                 else
                 {
-                    console.Set(cell.X, cell.Y, Colors.Wall, Colors.WallBackground, '#');  
+                    console.Set(cell.X, cell.Y, Colors.Wall, Colors.WallBackground, '#');
                 }
             }
         }
@@ -85,6 +85,44 @@ namespace First_Game.Core
                     SetCellProperties(cell.X, cell.Y, cell.IsTransparent, cell.IsWalkable, true);
                 }
             }
+        }
+
+        //this method checks that the previous cell the actor was on is now alkable and the current cell
+        //the actor is on is not walkable
+
+        //returns true when able to place the Actor on the cell and returns false if it can't
+        public bool SetActorPosition(Actor actor, int x, int y)
+        {
+            //only allow actor too move too new position if the cell is walkable
+            if (GetCell(x,y).IsWalkable)
+            {
+                //sets the previous actor's cell positon too walkable
+                SetIsWalkable(actor.X, actor.Y, true);
+
+                //Update the actors position
+                actor.X = x;
+                actor.Y = y;
+
+                //makes the current cellthe actor is on too not walkable
+                SetIsWalkable(actor.X, actor.Y, false);
+
+                //if the actor is part of the player subclass update the players field of view
+                if (actor is Player)
+                {
+                    UpdatePlayerFieldOfView();
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        //this method sets the cell the actor is on too non walkable
+        public void SetIsWalkable( int x, int y, bool isWalkable)
+        {
+            ICell cell = GetCell(x,y);
+            SetCellProperties(cell.X, cell.Y, cell.IsTransparent, isWalkable, cell.IsExplored);
         }
     }
 }
