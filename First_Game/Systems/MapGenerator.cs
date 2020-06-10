@@ -43,6 +43,7 @@ namespace First_Game.Systems
             //until you reach that maps max number of rooms needed
             for (int r = 0; r < _maxRooms; r++)
             {
+
                 //determine the sizes and position of the room randomly
                 int roomWidth = Game.random.Next(_roomMinSize, _roomMaxSize);
                 int roomHeight = Game.random.Next(_roomMinSize, _roomMaxSize);
@@ -69,12 +70,46 @@ namespace First_Game.Systems
                     CreateRoom(room);
                 }
 
-               
+                
+
+                
+
+
             }
+
+            //go through all rooms that were generated except for the first room
+            for (int r = 1; r < _map.Rooms.Count; r++)
+            {
+
+                //find the x and y axis of the room we are currently in and
+                //the x and y axis of the room previous
+                int previousRoomCenterX = _map.Rooms[r - 1].Center.X;
+                int previousRoomCenterY = _map.Rooms[r - 1].Center.Y;
+                int currentRoomCenterX = _map.Rooms[r].Center.X;
+                int currentRoomCenterY = _map.Rooms[r].Center.Y;
+
+                //sets up a 50/50 chance of which tunnel we should make
+                if (Game.random.Next(1, 2) == 1)
+                {
+                    CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, previousRoomCenterY);
+                    CreateVerticalTunnel(previousRoomCenterY, currentRoomCenterY, currentRoomCenterX);
+                }
+                else
+                {
+                    CreateVerticalTunnel(previousRoomCenterY, currentRoomCenterY, previousRoomCenterX);
+                    CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, currentRoomCenterY);
+                }
+            }
+
+            //once rooms and tunnels are generated we add the player too the map
+            PlacePlayer();
 
             return _map;
 
 
+
+            #region OldMap
+            //used this at the beging too make sure the map works by implementing a big empty room on the map
             /*foreach (Cell cell in _map.GetAllCells())
             {
                 _map.SetCellProperties(cell.X, cell.Y, true, true, true);
@@ -95,18 +130,54 @@ namespace First_Game.Systems
 
             return _map;
             */
+            #endregion OldMap
         }
 
         //set the cell properties of the room we are creating too true 
         //so that we can walk on them
         private void CreateRoom(Rectangle room)
         {
+            //+1 too make sure there are space between rooms
             for (int x = room.Left + 1; x < room.Right; x++)
             {
                 for (int y = room.Top + 1; y < room.Bottom; y++)
                 {
-                    _map.SetCellProperties(x, y, true, true, true);
+                    //set is explored too false when rooms are created so you can't first see them when you start the game
+                    _map.SetCellProperties(x, y, true, true, false);
                 }
+            }
+        }
+
+        //finds the center of the first room we created on the map and places that player there
+        private void PlacePlayer()
+        {
+            Player player = Game.player;
+            if (player == null)
+            {
+                player = new Player();
+            }
+
+            player.X = _map.Rooms[0].Center.X;
+            player.Y = _map.Rooms[0].Center.Y;
+
+            _map.AddPlayer(player);
+        }
+
+        //creates a tunnel out of the map parallel too the x-axis too the next room
+        private void CreateHorizontalTunnel(int xStart, int xEnd, int yPosition)
+        {
+            for (int x = Math.Min(xStart,xEnd); x < Math.Max(xStart,xEnd); x++)
+            {
+                _map.SetCellProperties(x, yPosition, true, true);
+            }
+        }
+
+        //creates a tunnel out of the map parrallel too the y-axis too the next room
+        private void CreateVerticalTunnel(int yStart, int yEnd, int xPosition)
+        {
+            for (int y = Math.Min(yStart, yEnd); y < Math.Max(yStart, yEnd); y++)
+            {
+                _map.SetCellProperties(xPosition, y, true, true);
             }
         }
     }

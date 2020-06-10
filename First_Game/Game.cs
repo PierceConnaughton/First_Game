@@ -50,7 +50,7 @@ namespace First_Game
         public static IRandom random { get; private set; }
 
         //add player to the game
-        public static Player player { get; private set; }
+        public static Player player { get; set; }
 
         //add dungeon map too the game
         public static DungeonMap DungeonMap { get; private set; }
@@ -82,8 +82,7 @@ namespace First_Game
 
             commandSystem = new CommandSystem();
 
-            //construct a new player
-            player = new Player();
+            
 
             //construct a new dungeon map with the size of the map the number of rooms you want and the max and min sizes of those rooms
             MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7 );

@@ -133,5 +133,15 @@ namespace First_Game.Core
             ICell cell = GetCell(x,y);
             SetCellProperties(cell.X, cell.Y, cell.IsTransparent, isWalkable, cell.IsExplored);
         }
+
+        //whenever we create a map we use this method after too add a player too the map
+        public void AddPlayer( Player player)
+        {
+            Game.player = player;
+            SetIsWalkable(player.X, player.Y, false);
+            UpdatePlayerFieldOfView();
+        }
+
+
     }
 }
