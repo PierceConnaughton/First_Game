@@ -175,6 +175,22 @@ namespace First_Game.Core
             SetIsWalkable(monster.X, monster.Y, false);
         }
 
+        //removes monster from map and makes space available
+        public void RemoveMonster (Monster monster)
+        {
+            //remove the monster 
+            _monsters.Remove(monster);
+
+            //after removing the monster from the map, make sure the cell is available again
+            SetIsWalkable(monster.X, monster.Y, true);
+        }
+
+        //gets the monster at a particular locaton using coordinates
+        public Monster GetMonsterAt(int x,int y)
+        {    
+            return _monsters.FirstOrDefault(m => m.X == x && m.Y == y);
+        }
+
         //we use this method too find a random cell in the map that is walkable for the monster too spawn in
         public Point GetRandomWalkableLocationInRoom(Rectangle room)
         {
