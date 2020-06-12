@@ -45,6 +45,9 @@ namespace First_Game
 
         private static bool _renderRequired = true;
 
+        private static int _mapLevel = 1;
+
+        //count number of steps player took
         //private static int _steps = 0;
 
         public static CommandSystem commandSystem { get; private set; }
@@ -74,8 +77,10 @@ namespace First_Game
             //DotNetRandom is a random number generator that is part of .Net
             random = new DotNetRandom(seed);
 
-            // The title will appear at the top of the console window including the seed used too generate the level
-            string consoleTitle = $"RougeSharp V3 Tutorial -  Level 1 - Seed {seed}";
+            // The title will appear at the top of the console window including the level we are on
+            string consoleTitle = $"RougeSharp -  Level {_mapLevel}";
+
+
 
             SchedulingSystem = new SchedulingSystem();
 
@@ -99,7 +104,7 @@ namespace First_Game
             
 
             //construct a new dungeon map with the size of the map the number of rooms you want and the max and min sizes of those rooms
-            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7 );
+            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7, _mapLevel );
             DungeonMap = mapGenerator.CreateMap();
 
             //add the players field of view
@@ -201,6 +206,21 @@ namespace First_Game
                     else if (keyPress.Key == RLKey.Escape)
                     {
                         _rootConsole.Close();
+                    }
+
+                    //if player is on a stairs going down cell and presses period it will create a new map and message log and
+                    //command system it will increase the map level and show it and change player act too true
+                    else if (keyPress.Key == RLKey.Period)
+                    {
+                        if (DungeonMap.CanMoveDownToNextLevel())
+                        {
+                            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7, ++_mapLevel);
+                            DungeonMap = mapGenerator.CreateMap();
+                            messageLog = new MessageLog();
+                            commandSystem = new CommandSystem();
+                            _rootConsole.Title = $"RougeSharp - Level {_mapLevel}";
+                            didPlayerAct = true;
+                        }
                     }
                 }
             }

@@ -25,7 +25,7 @@ namespace First_Game.Systems
 
         //Constructing a new map generator requires the dimensions of the maps it will create
         //as well as the sizes of rooms and maximum number of rooms
-        public MapGenerator( int width, int height, int maxRooms, int roomMaxSize, int roomMinSize)
+        public MapGenerator( int width, int height, int maxRooms, int roomMaxSize, int roomMinSize,int mapLevel)
         {       
              _width = width;
              _height = height;
@@ -103,6 +103,8 @@ namespace First_Game.Systems
             {
                 CreateDoors(room);
             }
+
+            CreateStairs();
 
             //once rooms and tunnels are generated we add the player too the map
             PlacePlayer();
@@ -214,6 +216,7 @@ namespace First_Game.Systems
             }
         }
 
+        //Create Doors
         private void CreateDoors(Rectangle room)
         {
             //the boundaries of the room
@@ -291,5 +294,26 @@ namespace First_Game.Systems
             return false;
 
         }
+        
+        //creates the stairs
+        private void CreateStairs()
+        {
+            //creates stairs going up in the first room made next too the player
+            _map.StairsUp = new Stairs
+            {
+                X = _map.Rooms.First().Center.X + 1,
+                Y = _map.Rooms.First().Center.Y,
+                IsUp = true
+            };
+
+            //creates stairs going down in the last room made in the center of the room
+            _map.StairsDown = new Stairs
+            {
+                X = _map.Rooms.Last().Center.X,
+                Y = _map.Rooms.Last().Center.Y,
+                IsUp = false
+            };
+        }
+
     }
 }

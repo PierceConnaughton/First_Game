@@ -15,6 +15,9 @@ namespace First_Game.Core
     //DungeonMap is our sub class we created of the base class that was created by rouge sharp
     public class DungeonMap : Map
     {
+        public Stairs StairsUp { get; set; }
+        public Stairs StairsDown { get; set; }
+
         //create a list of rooms
         public List<Rectangle> Rooms { get; set; }
 
@@ -24,6 +27,9 @@ namespace First_Game.Core
 
         public DungeonMap()
         {
+            //clear the schedule for monsters everytime you change levels
+            Game.SchedulingSystem.Clear();
+
             //everytime we create a dungeon map we have a list of rooms created and monsters created
             Rooms = new List<Rectangle>();
 
@@ -53,6 +59,9 @@ namespace First_Game.Core
             {
                 door.Draw(mapConsole, this);
             }
+
+            StairsUp.Draw(mapConsole, this);
+            StairsDown.Draw(mapConsole, this);
 
             //keep an index so we know which position to draw monster stats at
             int i = 0;
@@ -277,6 +286,15 @@ namespace First_Game.Core
                 Game.messageLog.Add($"{actor.Name} opened a door");
             }
         }
+
+        //check if player is on a stairs going down cell
+        public bool CanMoveDownToNextLevel()
+        {
+            Player player = Game.player;
+            return StairsDown.X == player.X && StairsDown.Y == player.Y;
+        }
+
+
 
 
     }

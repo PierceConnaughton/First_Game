@@ -25,7 +25,7 @@ namespace First_Game.Core
         //creates door
         public Door()
         {
-            //reprsemys the colors and symbol that we want too represent the door
+            //reprsents the colors and symbol that we want too represent the door
             Symbol = '+';
             Color = Colors.Door;
             BackgroundColor = Colors.DoorBackground;
