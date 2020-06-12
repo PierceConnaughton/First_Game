@@ -47,7 +47,7 @@ namespace First_Game.Systems
             }
         }
 
-        public void MoveMonster(Monster monster, Cell cell)
+        public void MoveMonster(Monster monster, ICell cell)
         {
             if (!Game.DungeonMap.SetActorPosition(monster,cell.X,cell.Y))
             {

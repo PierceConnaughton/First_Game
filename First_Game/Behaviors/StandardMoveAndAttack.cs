@@ -64,8 +64,8 @@ namespace First_Game.Behaviors
                 {
                     try
                     {
-                        Cell cell = (Cell)path.StepForward();
-                        commandSystem.MoveMonster(monster, cell);
+                        
+                        commandSystem.MoveMonster(monster, path.StepForward());
                     }
                     catch (NoMoreStepsException)
                     {

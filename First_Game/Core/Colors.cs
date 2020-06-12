@@ -23,6 +23,12 @@ namespace First_Game.Core
         public static RLColor WallBackgroundFov = Swatch.SecondaryDarker;
         public static RLColor WallFov = Swatch.SecondaryLighter;
 
+        //colors of doors when in view and out of view
+        public static RLColor DoorBackground = Swatch.ComplimentDarkest;
+        public static RLColor Door = Swatch.ComplimentLighter;
+        public static RLColor DoorBackgroundFov = Swatch.ComplimentDarker;
+        public static RLColor DoorFov = Swatch.ComplimentLightest;
+
         //color of player 
         public static RLColor Player = Swatch.DbLight;
 
@@ -35,6 +41,6 @@ namespace First_Game.Core
         public static RLColor Gold = Swatch.DbSun;
 
         //color of first monster of the game
-        public static RLColor KoboldColor = RLColor.Red;
+        public static RLColor KoboldColor = RLColor.Cyan;
     }
 }

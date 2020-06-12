@@ -16,17 +16,20 @@ namespace First_Game.Core
     public class DungeonMap : Map
     {
         //create a list of rooms
-        public List<Rectangle> Rooms;
+        public List<Rectangle> Rooms { get; set; }
 
         private readonly List<Monster> _monsters;
+
+        public List<Door> Doors { get; set; }
 
         public DungeonMap()
         {
             //everytime we create a dungeon map we have a list of rooms created and monsters created
             Rooms = new List<Rectangle>();
 
-
             _monsters = new List<Monster>();
+
+            Doors = new List<Door>();
         }
 
         //The Draw method will be called each time the map is updated
@@ -46,6 +49,11 @@ namespace First_Game.Core
                 SetConsoleSymbolForCell(mapConsole, cell);
             }
 
+            foreach (Door door in Doors)
+            {
+                door.Draw(mapConsole, this);
+            }
+
             //keep an index so we know which position to draw monster stats at
             int i = 0;
 
@@ -60,6 +68,8 @@ namespace First_Game.Core
                     i++;
                 }
             }
+
+            
         }
 
         private void SetConsoleSymbolForCell(RLConsole console, Cell cell)
@@ -139,11 +149,16 @@ namespace First_Game.Core
                 //makes the current cellthe actor is on too not walkable
                 SetIsWalkable(actor.X, actor.Y, false);
 
+                //try to open door if a door exists in this new position
+                OpenDoor(actor, x, y);
+
                 //if the actor is part of the player subclass update the players field of view
                 if (actor is Player)
                 {
                     UpdatePlayerFieldOfView();
                 }
+
+               
 
                 return true;
             }
@@ -233,6 +248,34 @@ namespace First_Game.Core
                 }
             }
             return false;
+        }
+
+        //Returns the door at the x,y position or null if one is not found.
+        public Door GetDoor(int x, int y)
+        {
+            return Doors.SingleOrDefault(d => d.X == x && d.Y == y);
+        }
+
+        //actor opens the door at the x y position
+        private void OpenDoor(Actor actor, int x, int y)
+        {
+            //check if door is at that positon
+            Door door = GetDoor(x, y);
+
+            //if door is found and is not open
+            if (door != null && !door.IsOpen)
+            {
+                //opens the door
+                door.IsOpen = true;
+
+                //gets the cell of the door position
+                var cell = GetCell(x, y);
+
+                //once the door is open it should be transparent and not block field of view
+                SetCellProperties(x, y, true, cell.IsWalkable, cell.IsExplored);
+
+                Game.messageLog.Add($"{actor.Name} opened a door");
+            }
         }
 
 

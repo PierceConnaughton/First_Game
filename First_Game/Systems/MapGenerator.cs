@@ -70,12 +70,8 @@ namespace First_Game.Systems
                 foreach (Rectangle room in _map.Rooms)
                 {
                     CreateRoom(room);
+                    
                 }
-
-                
-
-                
-
 
             }
 
@@ -101,6 +97,11 @@ namespace First_Game.Systems
                     CreateVerticalTunnel(previousRoomCenterY, currentRoomCenterY, previousRoomCenterX);
                     CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, currentRoomCenterY);
                 }
+            }
+
+            foreach (Rectangle room in _map.Rooms)
+            {
+                CreateDoors(room);
             }
 
             //once rooms and tunnels are generated we add the player too the map
@@ -211,6 +212,84 @@ namespace First_Game.Systems
             {
                 _map.SetCellProperties(xPosition, y, true, true);
             }
+        }
+
+        private void CreateDoors(Rectangle room)
+        {
+            //the boundaries of the room
+            int xMin = room.Left;
+            int xMax = room.Right;
+            int yMin = room.Top;
+            int yMax = room.Bottom;
+
+            //put the room border cells into a list
+            List<ICell> borderCells = _map.GetCellsAlongLine(xMin, yMin, xMax, yMin).ToList();
+            borderCells.AddRange(_map.GetCellsAlongLine(xMin, yMin, xMin, yMax));
+            borderCells.AddRange(_map.GetCellsAlongLine(xMin, yMax, xMax, yMax));
+            borderCells.AddRange(_map.GetCellsAlongLine(xMax, yMin, xMax, yMax));
+
+            //Go through each room of the border cells and look for locations too place doors
+            foreach (Cell cell in borderCells)
+            {
+                if (IsPotentialDoor(cell))
+                {
+                    //if door is closed it must block te field of view
+                    //done at the start because all doors will start off closed 
+                    _map.SetCellProperties(cell.X, cell.Y, false, true);
+
+                    //add door at this position and check that the door is closed
+                    _map.Doors.Add(new Door
+                    {
+                        X = cell.X,
+                        Y = cell.Y,
+                        IsOpen = false
+                    }); ;
+
+                }
+            }
+
+        }
+
+        //Checks to see if a cell is a good place for a door
+        private bool IsPotentialDoor(ICell cell)
+        {
+            //If the cell is not walkable
+            //then it is a wall and not a good place for a door
+            if (!cell.IsWalkable)
+            {
+                return false;
+            }
+
+            //check all of the neighbouring cells
+            ICell right = _map.GetCell(cell.X + 1, cell.Y);
+            ICell left = _map.GetCell(cell.X - 1, cell.Y);
+            ICell top = _map.GetCell(cell.X, cell.Y - 1);
+            ICell bottom = _map.GetCell(cell.X + 1, cell.Y +1);
+
+            //make sure that a door is not already there
+            if (_map.GetDoor(cell.X, cell.Y) != null ||
+                _map.GetDoor(right.X, right.Y) != null ||
+                _map.GetDoor(left.X, left.Y) != null ||
+                _map.GetDoor(top.X, top.Y) != null ||
+                _map.GetDoor(bottom.X, bottom.Y) != null )
+            {
+                return false;
+            }
+
+            //good place for a door on the right or left of the room
+            if (right.IsWalkable && left.IsWalkable && !top.IsWalkable && !bottom.IsWalkable)
+            {
+                return true;
+            }
+
+            //good place for a door on the top or bottom of the room
+            if (!right.IsWalkable && !left.IsWalkable && top.IsWalkable && bottom.IsWalkable)
+            {
+                return true;
+
+            }
+            return false;
+
         }
     }
 }

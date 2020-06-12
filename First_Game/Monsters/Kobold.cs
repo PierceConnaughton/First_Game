@@ -30,9 +30,9 @@ namespace First_Game.Monsters
                 Gold = Dice.Roll("5D5"),
                 Health = health,
                 MaxHealth = health,
-                Name = "Kobold",
-                Speed = 14,
-                Symbol = 'K'
+                Name = "Drowner",
+                Speed = 50,
+                Symbol = 'D'
             };
         }
 
