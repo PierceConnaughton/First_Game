@@ -17,8 +17,12 @@ namespace First_Game.Monsters
     {
         public static Kobold Create(int level)
         {
+            #region Prop
             int health = Dice.Roll("2D5");
 
+            #endregion Prop
+
+            #region Constructor
             return new Kobold
             {
                 Attack = Dice.Roll("1D3") + level / 3,
@@ -34,6 +38,8 @@ namespace First_Game.Monsters
                 Speed = 50,
                 Symbol = 'D'
             };
+
+            #endregion Constructor
         }
 
     }

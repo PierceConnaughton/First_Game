@@ -11,6 +11,10 @@ namespace First_Game.Core
 {
     public class Actor : IActor, IDrawable, IScheduleable
     {
+        #region Prop
+
+        //Did the props seperate here incase later in the game we want too increase or decrease our stats ect.
+
         //IActor 
         private int _attack;
         private int _attackChance;
@@ -150,6 +154,8 @@ namespace First_Game.Core
         public int X { get; set; }
         public int Y { get; set; }
 
+       
+
         // IScheduleable
         public int Time
         {
@@ -159,6 +165,12 @@ namespace First_Game.Core
             }
         }
 
+        #endregion Prop
+
+
+        #region Constructors
+
+        //IDrawable
         public void Draw(RLConsole console, IMap map)
         {
             // Don't draw actors in cells that haven't been explored
@@ -179,7 +191,9 @@ namespace First_Game.Core
             }
         }
 
+        #endregion Constructors
+
     }
 
-   
+
 }

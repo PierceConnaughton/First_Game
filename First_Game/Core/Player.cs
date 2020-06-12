@@ -11,9 +11,12 @@ namespace First_Game.Core
 {
     public class Player : Actor
     {
+        #region Constructor
         //player is the actor you play as
         public Player()
         {
+            
+
             //player starts with 2 dice rolls for attacking
             Attack = 2;
 
@@ -51,6 +54,10 @@ namespace First_Game.Core
             Symbol = '@';
         }
 
+        #endregion Constructor
+
+        #region Constructor
+
         //display all the players stats on the stat console with appropriate colors and in the right positions
         public void DrawStats(RLConsole statConsole)
         {
@@ -61,5 +68,7 @@ namespace First_Game.Core
             statConsole.Print(1, 9, $"Gold:      {Gold}", Colors.Gold);
 
         }
+
+        #endregion Constructor
     }
 }

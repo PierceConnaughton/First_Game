@@ -15,6 +15,7 @@ namespace First_Game.Core
     //DungeonMap is our sub class we created of the base class that was created by rouge sharp
     public class DungeonMap : Map
     {
+        #region Prop
         public Stairs StairsUp { get; set; }
         public Stairs StairsDown { get; set; }
 
@@ -25,6 +26,9 @@ namespace First_Game.Core
 
         public List<Door> Doors { get; set; }
 
+        #endregion Prop
+
+        #region Constructor
         public DungeonMap()
         {
             //clear the schedule for monsters everytime you change levels
@@ -38,9 +42,14 @@ namespace First_Game.Core
             Doors = new List<Door>();
         }
 
+        #endregion Constructor
+
+
+
+        #region Methods
+
         //The Draw method will be called each time the map is updated
         //It will render all of the symbols or colors for each cell to the map sub console we created earlier
-
         public void Draw(RLConsole mapConsole, RLConsole statConsole)
         {
             //ineffecient too redraw code everytime
@@ -78,8 +87,8 @@ namespace First_Game.Core
                 }
             }
 
-            
         }
+        
 
         private void SetConsoleSymbolForCell(RLConsole console, Cell cell)
         {
@@ -232,6 +241,7 @@ namespace First_Game.Core
                     int x = Game.random.Next(1, room.Width - 2) + room.X;
                     int y = Game.random.Next(1, room.Width - 2) + room.Y;
 
+                    //glitch here
                     if (IsWalkable(x,y))
                     {
                         return new Point(x, y);
@@ -293,6 +303,8 @@ namespace First_Game.Core
             Player player = Game.player;
             return StairsDown.X == player.X && StairsDown.Y == player.Y;
         }
+
+        #endregion Methods
 
 
 

@@ -14,6 +14,7 @@ namespace First_Game.Systems
 {
     public class MapGenerator
     {
+        #region Prop
         private readonly int _width;
         private readonly int _height;
 
@@ -23,6 +24,9 @@ namespace First_Game.Systems
 
         private readonly DungeonMap _map;
 
+        #endregion Prop
+
+        #region Constructor
         //Constructing a new map generator requires the dimensions of the maps it will create
         //as well as the sizes of rooms and maximum number of rooms
         public MapGenerator( int width, int height, int maxRooms, int roomMaxSize, int roomMinSize,int mapLevel)
@@ -35,6 +39,9 @@ namespace First_Game.Systems
             _map = new DungeonMap();
         }
 
+        #endregion Constructor
+
+        #region Methods
         //Generate a new map that places rooms randomly around the map
         public DungeonMap CreateMap()
         {
@@ -171,18 +178,20 @@ namespace First_Game.Systems
         }
 
         //this method goes through each room and rolls a 10-sided die.
-        //if the result of thr roll is 1 - 6 we'll roll 4 sided die and 
+        //if the result of thr roll is 1 - 7 we'll roll 4 sided die and 
         //add that many monsters too that particular room in any open cells
         private void PlaceMonsters()
         {
+
             foreach (var room in _map.Rooms)
             {
 
-
-                if (Dice.Roll("1D10") < 7)
+                if (Dice.Roll("1D10") < 8)
                 {
-                    var numberOfMonsters = Dice.Roll("1D4");
-                    for (int i = 0; i < numberOfMonsters; i++)
+                    var numberOfMonsters = Dice.Roll("1D3");
+
+                    //start i at 1 because we dont want monsters in first room we enter
+                    for (int i = 1; i < numberOfMonsters; i++)
                     {
                         Point randomRoomLocation = _map.GetRandomWalkableLocationInRoom(room);
 
@@ -195,6 +204,9 @@ namespace First_Game.Systems
                         }
                     }
                 }
+
+
+
             }
         }
 
@@ -315,5 +327,6 @@ namespace First_Game.Systems
             };
         }
 
+        #endregion Methods
     }
 }

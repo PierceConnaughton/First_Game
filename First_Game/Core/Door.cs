@@ -12,6 +12,7 @@ namespace First_Game.Core
     //Inherits from Idrawable because we want to draw the doors on the map console
     public class Door : IDrawable
     {
+        #region Prop
         public bool IsOpen { get; set; }
 
         public RLColor Color { get; set; }
@@ -22,6 +23,10 @@ namespace First_Game.Core
         public int X { get; set; }
         public int Y { get; set; }
 
+        #endregion Prop
+
+        #region Constructors
+
         //creates door
         public Door()
         {
@@ -30,6 +35,10 @@ namespace First_Game.Core
             Color = Colors.Door;
             BackgroundColor = Colors.DoorBackground;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void Draw(RLConsole console, IMap map)
         {
@@ -61,6 +70,8 @@ namespace First_Game.Core
             console.Set(X, Y, Color, BackgroundColor, Symbol);
         }
 
-        
+        #endregion Methods
+
+
     }
 }

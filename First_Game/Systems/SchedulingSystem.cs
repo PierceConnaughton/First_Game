@@ -9,15 +9,23 @@ namespace First_Game.Systems
 {
     public class SchedulingSystem
     {
+        #region Prop
         private int _time;
         private readonly SortedDictionary<int, List<IScheduleable>> _scheduleables;
 
+        #endregion Prop
+
+        #region Constructor
         public SchedulingSystem()
         {
             //the time starts at 0 and we create a new list of scheduables
             _time = 0;
             _scheduleables = new SortedDictionary<int, List<IScheduleable>>();
         }
+
+        #endregion Constructor
+
+        #region Methods
 
         //this adds a new object too the schedule
         //we place it at the current time plus the objects time property
@@ -87,5 +95,7 @@ namespace First_Game.Systems
             _time = 0;
             _scheduleables.Clear();
         }
+
+        #endregion Methods
     }
 }

@@ -9,6 +9,7 @@ namespace First_Game.Core
     public enum Direction
     {
         //the directions correspond to numbers on the numpad
+        
         None = 0,
         DownLeft = 1,
         Down = 2,

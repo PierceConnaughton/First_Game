@@ -16,6 +16,7 @@ namespace First_Game
 {
     public class Game
     {
+        #region Properties
         // set the screen height and width
         //make sure the subconsole sizes you create fit appropriatley with the main screen
         private static readonly int _screenWidth = 120;
@@ -64,6 +65,7 @@ namespace First_Game
 
         public static SchedulingSystem SchedulingSystem { get; private set; }
 
+        #endregion Properties
 
         static void Main(string[] args)
         {
@@ -104,7 +106,7 @@ namespace First_Game
             
 
             //construct a new dungeon map with the size of the map the number of rooms you want and the max and min sizes of those rooms
-            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7, _mapLevel );
+            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 15, 5, _mapLevel );
             DungeonMap = mapGenerator.CreateMap();
 
             //add the players field of view
@@ -122,6 +124,8 @@ namespace First_Game
             _rootConsole.Run();
 
         }
+
+        #region Methods
 
         private static void OnRootConsoleRender(object sender, UpdateEventArgs e)
         {
@@ -220,6 +224,12 @@ namespace First_Game
                             commandSystem = new CommandSystem();
                             _rootConsole.Title = $"RougeSharp - Level {_mapLevel}";
                             didPlayerAct = true;
+                            
+                            player.MaxHealth += 5;
+                            player.Health = player.MaxHealth;
+
+                            player.Gold += 20;
+                            
                         }
                     }
                 }
@@ -240,7 +250,7 @@ namespace First_Game
 
 
             //set the background color and text for each console except the map and message consoles
-            //_messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, RLColor.Gray);
+            //_messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, RLColor.Red);
 
             //_statConsole.SetBackColor(0, 0, _statWidth, _statHeight, RLColor.Red);
             //_statConsole.Print(1, 1, "Stats", Colors.TextHeading);
@@ -249,5 +259,7 @@ namespace First_Game
             _inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
 
         }
+
+        #endregion Methods
     }
 }

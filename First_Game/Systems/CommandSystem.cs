@@ -12,8 +12,13 @@ namespace First_Game.Systems
 {
     public class CommandSystem
     {
+        #region Prop
+
         public bool IsPlayerTurn { get; set; }
 
+        #endregion Prop
+
+        #region Methods
         public void EndPlayerTurn()
         {
             IsPlayerTurn = false;
@@ -158,7 +163,7 @@ namespace First_Game.Systems
                 defender.Health = defender.Health - damage;
 
                 //display how much damage was done too defender
-                Game.messageLog.Add($"{defender.Name} was hit for {damage} damage");
+                //Game.messageLog.Add($"{defender.Name} was hit for {damage} damage");
 
                 //if defenders health is now below or = 0 resolve there death depending on what they were
                 if (defender.Health <= 0)
@@ -169,7 +174,7 @@ namespace First_Game.Systems
             else
             {
                 //if no damage was done display this message
-                Game.messageLog.Add($"   {defender.Name} blocked all damage");
+                //Game.messageLog.Add($"   {defender.Name} blocked all damage");
             }
         }
 
@@ -179,7 +184,7 @@ namespace First_Game.Systems
             //if the defender was a player display you are dead
             if (defender is Player)
             {
-                Game.messageLog.Add($"  YOU ARE DEAD");
+                Game.messageLog.Add($"YOU ARE DEAD");
 
             }
 
@@ -201,8 +206,8 @@ namespace First_Game.Systems
             if (hits > 0)
             {
                 //display how many hits
-                attackMessage.AppendFormat("scoring {0} hits", hits);
-                defenseMessage.AppendFormat("   {0} defends and rolls:", defender.Name);
+                //attackMessage.AppendFormat("scoring {0} hits", hits);
+                //defenseMessage.AppendFormat("   {0} defends and rolls:", defender.Name);
 
                 //Roll a number of 100-sided dice equal to the defense value of the defending actor
                 //gets the dice for that defender
@@ -222,12 +227,12 @@ namespace First_Game.Systems
                     }
                 }
                 //display how many blocks the defender made
-                defenseMessage.AppendFormat("resulting in {0} blocks", blocks);
+                //defenseMessage.AppendFormat("resulting in {0} blocks", blocks);
             }
             //if hits were less thanor equal to 0 display this message
             else
             {
-                attackMessage.Append("and misses completely.");
+                //attackMessage.Append("and misses completely.");
             }
 
             return blocks;
@@ -239,7 +244,7 @@ namespace First_Game.Systems
             int hits = 0;
 
             //displays message of who is attacking which defender
-            attackMessage.AppendFormat("{0} attacks {1} and rolls: ", attacker.Name, defender.Name);
+            //attackMessage.AppendFormat("{0} attacks {1} and rolls: ", attacker.Name, defender.Name);
 
             //Roll a number 100-dice equal to the attack value of the attacking actor
             //gets the dice for that attacker
@@ -263,5 +268,7 @@ namespace First_Game.Systems
 
             return hits;
         }
+
+        #endregion Methods
     }
 }

@@ -13,6 +13,8 @@ namespace First_Game.Core
     {
         //added color and symbols too reprsent the stairs added X and Y positons 
         //for the stairs and a bool too check if the stairs is going up or down
+        #region Prop
+
         public RLColor Color { get; set; }
 
         public char Symbol { get; set; }
@@ -23,9 +25,12 @@ namespace First_Game.Core
 
         public bool IsUp { get; set; }
 
+        #endregion Prop
+
+        #region Methods
         public void Draw(RLConsole console, IMap map)
         {
-            //if the door has not been seen 
+            //if the door has been seen 
             if (!map.GetCell(X,Y).IsExplored)
             {
                 return;
@@ -37,9 +42,9 @@ namespace First_Game.Core
             //if the door has been seen
             if (map.IsInFov(X,Y))
             {
-                Color = Colors.Player;
+                Color = RLColor.Brown;
             }
-            //if the door has been found
+            //if the door has not been found
             else
             {
                 Color = Colors.Floor;
@@ -47,5 +52,7 @@ namespace First_Game.Core
 
             console.Set(X, Y, Color, null, Symbol);
         }
+
+        #endregion Methods
     }
 }

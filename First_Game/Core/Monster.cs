@@ -12,9 +12,12 @@ namespace First_Game.Core
     //monster is a subclass of an actor
     public class Monster : Actor
     {
-
+        #region Prop
         public int? TurnsAlerted { get; set; }
 
+        #endregion Prop
+
+        #region Methods
         public void DrawStats(RLConsole statConsole, int position)
         {
             //start position at Y = 13 which is located below the player stats.
@@ -29,9 +32,18 @@ namespace First_Game.Core
             int remainingWidth = 16 - width;
 
             //set the background colors of the health bar to show how damaged the monster is
-            //the background color is the max health
-            statConsole.SetBackColor(3, yPosition, width, 1, Swatch.Primary);
-            //the second background color is the current health
+            //the background color is the current health
+
+            //if the monster is halfway too death change the color from primary too red
+            if (remainingWidth >= width / 2)
+            {
+                statConsole.SetBackColor(3, yPosition, width, 1, RLColor.Red);
+            }
+            else
+            {
+                statConsole.SetBackColor(3, yPosition, width, 1, Swatch.Primary);
+            }
+            //the second background color is the max health
             statConsole.SetBackColor(3 + width, yPosition, remainingWidth, 1, Swatch.PrimaryDarkest);
 
             //prints the monsters name over the top of there health bar
@@ -45,6 +57,8 @@ namespace First_Game.Core
             behavior.Act(this, commandSystem);
         }
 
-        
+        #endregion Methods
+
+
     }
 }
