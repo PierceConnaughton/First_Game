@@ -197,7 +197,7 @@ namespace First_Game.Systems
 
                         if (randomRoomLocation != null)
                         {
-                            var monster = Kobold.Create(1);
+                            var monster = Drowner.Create(1);
                             monster.X = randomRoomLocation.X;
                             monster.Y = randomRoomLocation.Y;
                             _map.AddMonster(monster);

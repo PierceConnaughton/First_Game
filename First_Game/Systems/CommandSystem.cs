@@ -138,12 +138,12 @@ namespace First_Game.Systems
             int blocks = ResolveDefense(defender, hits, attackMessage,defenseMessage);
 
             //adds attack message too messagelog
-            Game.messageLog.Add(attackMessage.ToString());
+            //Game.messageLog.Add(attackMessage.ToString());
 
             //if the defense message is not there display it
             if (!string.IsNullOrWhiteSpace(defenseMessage.ToString()))
             {
-                Game.messageLog.Add(defenseMessage.ToString());
+                //Game.messageLog.Add(defenseMessage.ToString());
             }
 
             //get the amount of damage gotten from how much the defender blocked the attackers hits
@@ -193,6 +193,8 @@ namespace First_Game.Systems
             {
                 Game.DungeonMap.RemoveMonster((Monster)defender);
                 Game.messageLog.Add($"  {defender.Name} Died and dropped {defender.Gold} gold");
+
+                
             }
         }
 

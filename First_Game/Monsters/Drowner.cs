@@ -10,12 +10,12 @@ using RogueSharp.DiceNotation;
 
 namespace First_Game.Monsters
 {
-    //the kobold monster from dnd
+    //the drowner monster
     //too get alot of stats I used the dnd dice notation from rogue sharp
 
-    public class Kobold : Monster
+    public class Drowner : Monster
     {
-        public static Kobold Create(int level)
+        public static Drowner Create(int level)
         {
             #region Prop
             int health = Dice.Roll("2D5");
@@ -23,7 +23,7 @@ namespace First_Game.Monsters
             #endregion Prop
 
             #region Constructor
-            return new Kobold
+            return new Drowner
             {
                 Attack = Dice.Roll("1D3") + level / 3,
                 AttackChance = Dice.Roll("25D3"),

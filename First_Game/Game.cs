@@ -69,6 +69,8 @@ namespace First_Game
 
         static void Main(string[] args)
         {
+
+
             //name of bitmap font file
             string fontFileName = "Images/terminal8x8.png";
 
@@ -106,13 +108,25 @@ namespace First_Game
             
 
             //construct a new dungeon map with the size of the map the number of rooms you want and the max and min sizes of those rooms
-            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 15, 5, _mapLevel );
+            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7, _mapLevel );
             DungeonMap = mapGenerator.CreateMap();
 
             //add the players field of view
             DungeonMap.UpdatePlayerFieldOfView();
 
 
+            Console.Write("What is you're name: ");
+            string newName = Console.ReadLine();
+
+            if (newName == "")
+            {
+                return;
+            }
+            else
+            {
+                player.Name = newName;
+            }
+            
 
             //Method for RNL Update
             _rootConsole.Update += OnRootConsoleUpdate;
